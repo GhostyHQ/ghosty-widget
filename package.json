@@ -2,20 +2,38 @@
   "name": "ghosty-widget",
   "version": "1.0.0",
   "description": "In-dApp Chat Integration",
-  "main": "index.js",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/esm/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GhostyHQ/ghosty-widget.git"
+  },
   "scripts": {
     "test": "jest --config jestconfig.json",
-    "build": "tsc",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test && npm run prettier && npm run lint",
+    "build": "yarn build:esm && yarn build:cjs",
+    "build:esm": "tsc",
+    "build:cjs": "tsc --module commonjs --outDir dist/cjs",
     "lint": "eslint \"{**/*,*}.{js,ts,jsx,tsx}\"",
     "prettier": "prettier --write \"{src,tests,example/src}/**/*.{js,ts,jsx,tsx}\""
   },
+  "peerDependencies": {
+    "react": ">=16"
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
   "keywords": [
     "web3",
     "chat-app",
     "blockchain"
   ],
   "author": "Muhlis Iqbal Utomo",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@testing-library/react": "^13.4.0",
     "@types/jest": "^29.4.0",
