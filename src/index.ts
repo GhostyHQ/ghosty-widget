@@ -1,3 +1,3 @@
-import MyCounter from './components/MyCounter'
+import WidgetChat from './components/WidgetChat'
 
-export { MyCounter }
+export { WidgetChat }
