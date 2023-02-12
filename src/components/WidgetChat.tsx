@@ -6,6 +6,7 @@ import Main from './Main/Main'
 import ButtonChat from './Common/ButtonChat'
 import { IUser } from '../interface/users'
 import useStore from '../stores/store'
+import Footer from './Footer/Footer'
 
 const WidgetChat = () => {
   const [currentChat, setCurrentChat] = useState<IUser>()
@@ -49,7 +50,11 @@ const WidgetChat = () => {
               <GridItem area={'main'}>
                 <Main />
               </GridItem>
-              {currentChat && <GridItem area={'footer'}>Footer</GridItem>}
+              {currentChat && (
+                <GridItem area={'footer'} className='relative'>
+                  <Footer />
+                </GridItem>
+              )}
             </Grid>
           </PopoverContent>
         </Portal>
