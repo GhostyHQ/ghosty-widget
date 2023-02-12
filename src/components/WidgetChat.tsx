@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { ChakraProvider, Grid, GridItem, Popover, PopoverContent, Portal } from '@chakra-ui/react'
+import { Box, ChakraProvider, Grid, GridItem, Popover, PopoverContent, Portal } from '@chakra-ui/react'
 import Header from './Header/Header'
 import Nav from './Nav/Nav'
 import Main from './Main/Main'
@@ -7,10 +7,57 @@ import ButtonChat from './Common/ButtonChat'
 import { IUser } from '../interface/users'
 import useStore from '../stores/store'
 import Footer from './Footer/Footer'
+import axios from 'axios'
+import { LogoGhosty } from './Icons/Logo'
 
-const WidgetChat = () => {
+interface WidgetChatProps {
+  currentUser: string
+  generateAuthToken: Promise<string>
+}
+
+const WidgetChat = ({ currentUser, generateAuthToken }: WidgetChatProps) => {
   const [currentChat, setCurrentChat] = useState<IUser>()
   const store = useStore()
+
+  useEffect(() => {
+    _init()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUser])
+
+  const _init = async () => {
+    if (currentUser) {
+      const res = await axios.get(`http://localhost:9090/api/profile`, {
+        params: {
+          accountId: currentUser,
+        },
+      })
+      const user = res.data.data
+
+      if (user.length === 0) {
+        const formData = new FormData()
+        formData.append('accountId', currentUser)
+
+        try {
+          const resp = await axios.put(`http://localhost:9090/api/profiles`, formData, {
+            headers: {
+              'Content-Type': 'application/json',
+              authorization: await generateAuthToken,
+            },
+          })
+          store.setUserProfile(resp.data.data)
+        } catch (err) {
+          store.setUserProfile({})
+        }
+      } else {
+        const userProfile = user
+        store.setUserProfile(userProfile)
+      }
+      store.setCurrentUser(currentUser)
+    }
+    store.setInitialized(true)
+  }
+
+  console.log('userProfile ghosty=> ', store.userProfile)
 
   useEffect(() => {
     if (localStorage['current-chat']) {
@@ -22,42 +69,52 @@ const WidgetChat = () => {
     <ChakraProvider>
       <Popover>
         <ButtonChat />
-        <Portal>
-          <PopoverContent minW='lg' minH='sm' className='mx-8 rounded-lg'>
-            <Grid
-              templateAreas={
-                currentChat
-                  ? `"nav header"
-                  "nav main"
-                  "nav footer"`
-                  : `"nav main"
-                  "nav main"
-                  "nav main"`
-              }
-              gridTemplateRows={'50px 1fr 30px'}
-              gridTemplateColumns={'150px 1fr'}
-              h='sm'
-              fontFamily='manrope'
-            >
-              {currentChat && (
-                <GridItem area={'header'} shadow='md' className='rounded-tr-md p-2'>
-                  <Header />
+        {currentUser ? (
+          <Portal>
+            <PopoverContent minW='lg' minH='sm' className='mx-8 rounded-lg'>
+              <Grid
+                templateAreas={
+                  currentChat && !store.isSetting
+                    ? `"nav header"
+                "nav main"
+                "nav footer"`
+                    : `"nav main"
+                "nav main"
+                "nav main"`
+                }
+                gridTemplateRows={'50px 1fr 30px'}
+                gridTemplateColumns={'150px 1fr'}
+                h='sm'
+                fontFamily='manrope'
+              >
+                {currentChat && !store.isSetting && (
+                  <GridItem area={'header'} shadow='md' className='rounded-tr-md p-2'>
+                    <Header />
+                  </GridItem>
+                )}
+                <GridItem area={'nav'} className='rounded-l-md border-r p-2'>
+                  <Nav />
                 </GridItem>
-              )}
-              <GridItem area={'nav'} className='rounded-l-md border-r p-2'>
-                <Nav />
-              </GridItem>
-              <GridItem area={'main'}>
-                <Main />
-              </GridItem>
-              {currentChat && (
-                <GridItem area={'footer'} className='relative'>
-                  <Footer />
+                <GridItem area={'main'}>
+                  <Main />
                 </GridItem>
-              )}
-            </Grid>
-          </PopoverContent>
-        </Portal>
+                {currentChat && !store.isSetting && (
+                  <GridItem area={'footer'} className='relative'>
+                    <Footer />
+                  </GridItem>
+                )}
+              </Grid>
+            </PopoverContent>
+          </Portal>
+        ) : (
+          <Portal>
+            <PopoverContent minW='lg' minH='sm' className='flex justify-center mx-8 rounded-lg'>
+              <Box className='mx-auto'>
+                <LogoGhosty size={100} />
+              </Box>
+            </PopoverContent>
+          </Portal>
+        )}
       </Popover>
     </ChakraProvider>
   )

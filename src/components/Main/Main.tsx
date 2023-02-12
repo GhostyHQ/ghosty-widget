@@ -7,6 +7,7 @@ import { IconLocked } from '../Icons/Icon'
 import LogoPlayingPhone from '../Icons/Logo/LogoPlayingPhone'
 import { prettyTruncate } from '../../utils/common'
 import Introduce from '../Common/Introduce'
+import Setting from '../Settings/Setting'
 
 const Main = () => {
   const [currentChat, setCurrentChat] = useState<IUser>()
@@ -26,6 +27,10 @@ const Main = () => {
     )
     setMessages(result)
   }, [currentChat])
+
+  if (store.isSetting) {
+    return <Setting />
+  }
 
   if (!currentChat) {
     return <Introduce />

@@ -24,6 +24,7 @@ const ChatList = (props: ChatListProps) => {
   const onClickCurrentUser = (user: IUser) => {
     localStorage.setItem('current-chat', JSON.stringify(user))
     store.setIsClickCurrentUser(!store.isClickCurrentUser)
+    store.setIsSetting(false)
   }
 
   return (
