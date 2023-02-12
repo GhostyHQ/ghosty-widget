@@ -11,7 +11,7 @@ const Setting = () => {
     <Box>
       <Text className='mb-4 py-2 font-semibold text-center border-b'>Settings</Text>
       <Box className='flex gap-2 px-4'>
-        <Avatar size='lg' name='Christian Nwamba' src='https://bit.ly/code-beast' />
+        <Avatar size='lg' name={store.currentUser as string} src={`https://bit.ly/${store.currentUser}`} />
         <Box>
           <Text className='mb-2 text-md'>{prettyTruncate(store.currentUser as string, 24, 'address')}</Text>
           <Button size='xs'>Edit Avatar</Button>

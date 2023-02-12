@@ -18,7 +18,7 @@ const Header = () => {
   return (
     <Box className='flex justify-between items-center'>
       <Box className='flex items-center gap-2'>
-        <Avatar size='sm' name={currentChat?.accountId} src={currentChat?.avatar}>
+        <Avatar size='sm' name={currentChat?.accountId} src={`https://bit.ly/${currentChat?.accountId}`}>
           {currentChat?.isActive && <AvatarBadge boxSize='1em' bg='green.500' />}
         </Avatar>
         <Box>

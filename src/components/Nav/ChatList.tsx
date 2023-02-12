@@ -40,7 +40,7 @@ const ChatList = (props: ChatListProps) => {
                 className={clsx('flex items-center gap-2 pl-2 py-1 cursor-pointer', idx === 0 && 'mt-2')}
                 onClick={() => onClickCurrentUser(user)}
               >
-                <Avatar size='sm' name={user.accountId} src={user.avatar}>
+                <Avatar size='sm' name={user.accountId} src={`https://bit.ly/${user.accountId}`}>
                   {user.isActive && <AvatarBadge boxSize='1em' bg='green.500' />}
                 </Avatar>
                 <Box>
