@@ -1,7 +1,34 @@
 export interface IUser {
-  id: number
   accountId: string
-  avatar: string
-  isActive: boolean
-  lastMessage: string
+  chatList: IChatList[]
+  createdAt: string
+  updatedAt: string
+}
+
+export interface IUserChatList {
+  accountId: string
+  accountChatList: string
+  alias: string
+  lastMessage: ILastMessage[]
+  createdAt: string
+  updatedAt: string
+}
+
+export interface ILastMessage {
+  createdAt: string
+  message: IMessage
+  receiverId: string
+  senderId: string
+  status: string
+  updatedAt: string
+}
+
+export interface IMessage {
+  text: string
+  image: string
+}
+
+export interface IChatList {
+  accountId: string
+  alias: string
 }

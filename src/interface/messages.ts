@@ -1,14 +1,13 @@
 export interface IMessages {
-  id: number
+  message: IMessage
   senderId: string
   receiverId: string
-  messages: IMessage[]
+  status: string
+  createdAt: string
+  updatedAt: string
 }
 
 export interface IMessage {
-  id: number
-  senderId: string
-  receiverId: string
-  message?: string
-  image?: string
+  text: string
+  image: string
 }

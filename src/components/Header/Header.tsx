@@ -3,10 +3,10 @@ import { Avatar, AvatarBadge, Box, Text } from '@chakra-ui/react'
 import { prettyTruncate } from '../../utils/common'
 import { IconEllipsisVertical } from '../Icons/Icon'
 import useStore from '../../stores/store'
-import { IUser } from '../../interface/users'
+import { IUserChatList } from '../../interface/users'
 
 const Header = () => {
-  const [currentChat, setCurrentChat] = useState<IUser>()
+  const [currentChat, setCurrentChat] = useState<IUserChatList>()
   const store = useStore()
 
   useEffect(() => {
@@ -15,18 +15,22 @@ const Header = () => {
     }
   }, [store.isClickCurrentUser])
 
+  const onClickUserDetail = () => {
+    store.setIsUserDetail(true)
+  }
+
   return (
     <Box className='flex justify-between items-center'>
       <Box className='flex items-center gap-2'>
-        <Avatar size='sm' name={currentChat?.accountId} src={`https://bit.ly/${currentChat?.accountId}`}>
-          {currentChat?.isActive && <AvatarBadge boxSize='1em' bg='green.500' />}
+        <Avatar size='sm' name={currentChat?.accountChatList} src={`https://bit.ly/${currentChat?.accountChatList}`}>
+          {true && <AvatarBadge boxSize='1em' bg='green.500' />}
         </Avatar>
         <Box>
-          <Text className='text-xs'>{prettyTruncate(currentChat?.accountId, 20, 'address')}</Text>
-          {currentChat?.isActive && <Text className='text-[9px] text-green-500'>Online</Text>}
+          <Text className='text-xs'>{prettyTruncate(currentChat?.accountChatList, 20, 'address')}</Text>
+          {true && <Text className='text-[9px] text-green-500'>Online</Text>}
         </Box>
       </Box>
-      <Box>
+      <Box className='cursor-pointer' onClick={onClickUserDetail}>
         <IconEllipsisVertical size={20} color='black' />
       </Box>
     </Box>

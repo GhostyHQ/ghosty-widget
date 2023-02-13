@@ -20,6 +20,7 @@ const WidgetChat = ({ currentUser, generateAuthToken }: WidgetChatProps) => {
   const store = useStore()
 
   useEffect(() => {
+    store.setAuthToken(generateAuthToken)
     _init()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser])
@@ -45,19 +46,19 @@ const WidgetChat = ({ currentUser, generateAuthToken }: WidgetChatProps) => {
             },
           })
           store.setUserProfile(resp.data.data)
+          store.setChatList(resp.data.data.chatList)
         } catch (err) {
           store.setUserProfile({})
         }
       } else {
         const userProfile = user
         store.setUserProfile(userProfile)
+        store.setChatList(user.chatList)
       }
       store.setCurrentUser(currentUser)
     }
     store.setInitialized(true)
   }
-
-  console.log('userProfile ghosty=> ', store.userProfile)
 
   useEffect(() => {
     if (localStorage['current-chat']) {
@@ -74,7 +75,7 @@ const WidgetChat = ({ currentUser, generateAuthToken }: WidgetChatProps) => {
             <PopoverContent minW='lg' minH='sm' className='mx-8 rounded-lg'>
               <Grid
                 templateAreas={
-                  currentChat && !store.isSetting
+                  currentChat && !store.isSetting && !store.isUserDetail
                     ? `"nav header"
                 "nav main"
                 "nav footer"`
@@ -87,7 +88,7 @@ const WidgetChat = ({ currentUser, generateAuthToken }: WidgetChatProps) => {
                 h='sm'
                 fontFamily='manrope'
               >
-                {currentChat && !store.isSetting && (
+                {currentChat && !store.isSetting && !store.isUserDetail && (
                   <GridItem area={'header'} shadow='md' className='rounded-tr-md p-2'>
                     <Header />
                   </GridItem>
@@ -98,7 +99,7 @@ const WidgetChat = ({ currentUser, generateAuthToken }: WidgetChatProps) => {
                 <GridItem area={'main'}>
                   <Main />
                 </GridItem>
-                {currentChat && !store.isSetting && (
+                {currentChat && !store.isSetting && !store.isUserDetail && (
                   <GridItem area={'footer'} className='relative'>
                     <Footer />
                   </GridItem>

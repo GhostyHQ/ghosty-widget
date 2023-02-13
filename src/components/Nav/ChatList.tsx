@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import { Avatar, AvatarBadge, Box, Text } from '@chakra-ui/react'
+import { Avatar, AvatarBadge, Box, Text, Tooltip } from '@chakra-ui/react'
 import { prettyTruncate } from '../../utils/common'
 import clsx from 'clsx'
-import { IUser } from '../../interface/users'
+import { IUserChatList } from '../../interface/users'
 import { LogoBeardedMan, LogoThinking } from '../Icons/Logo'
 import useStore from '../../stores/store'
+import moment from 'moment'
 
 interface ChatListProps {
-  filteredUsers: IUser[]
+  dataChatList: IUserChatList[]
+  filteredUsers: IUserChatList[]
 }
 
 const ChatList = (props: ChatListProps) => {
@@ -17,37 +19,49 @@ const ChatList = (props: ChatListProps) => {
   useEffect(() => {
     if (localStorage['current-chat']) {
       const data = JSON.parse(localStorage.getItem('current-chat') || '')
-      setActiveChat(data.accountId)
+      setActiveChat(data.accountChatList)
     }
   }, [store.isClickCurrentUser])
 
-  const onClickCurrentUser = (user: IUser) => {
+  const onClickCurrentUser = (user: IUserChatList) => {
     localStorage.setItem('current-chat', JSON.stringify(user))
     store.setIsClickCurrentUser(!store.isClickCurrentUser)
     store.setIsSetting(false)
+    store.setIsUserDetail(false)
   }
 
   return (
     <Box h='310px' className='flex flex-col overflow-y-scroll -mx-2'>
-      {dataUserList.data.length !== 0 ? (
-        props.filteredUsers.length !== 0 ? (
-          props.filteredUsers.map((user, idx) => {
+      {props.dataChatList?.length !== 0 ? (
+        props.filteredUsers?.length !== 0 ? (
+          props.filteredUsers?.map((user, idx) => {
             return (
-              <Box
+              <Tooltip
                 key={idx}
-                bg={activeChat === user.accountId ? 'gray.100' : ''}
-                _hover={{ bg: 'gray.100' }}
-                className={clsx('flex items-center gap-2 pl-2 py-1 cursor-pointer', idx === 0 && 'mt-2')}
-                onClick={() => onClickCurrentUser(user)}
+                placement='top'
+                size='10px'
+                isDisabled={user.alias === ''}
+                label={prettyTruncate(user.accountChatList, 14, 'address')}
               >
-                <Avatar size='sm' name={user.accountId} src={`https://bit.ly/${user.accountId}`}>
-                  {user.isActive && <AvatarBadge boxSize='1em' bg='green.500' />}
-                </Avatar>
-                <Box>
-                  <Text className='text-[10px] font-semibold'>{prettyTruncate(user.accountId, 14, 'address')}</Text>
-                  <Text className='text-[9px]'>{user.lastMessage}</Text>
+                <Box
+                  bg={activeChat === user.accountChatList ? 'gray.100' : ''}
+                  _hover={{ bg: 'gray.100' }}
+                  className={clsx('flex items-center gap-2 pl-2 py-1 cursor-pointer', idx === 0 && 'mt-2')}
+                  onClick={() => onClickCurrentUser(user)}
+                >
+                  <Avatar size='sm' name={user.accountChatList} src={`https://bit.ly/${user.accountChatList}`}>
+                    {true && <AvatarBadge boxSize='1em' bg='green.500' />}
+                  </Avatar>
+                  <Box>
+                    <Text className='text-[10px] font-semibold'>
+                      {prettyTruncate(user.alias || user.accountChatList, 14, 'address')}
+                    </Text>
+                    <Text className='text-[9px]'>
+                      {moment(user.lastMessage[0]?.createdAt).startOf('minute').fromNow()}
+                    </Text>
+                  </Box>
                 </Box>
-              </Box>
+              </Tooltip>
             )
           })
         ) : (

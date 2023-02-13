@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { Box, Text } from '@chakra-ui/react'
 import { IconGear, IconSearch } from '../Icons/Icon'
-import { dataUserList } from './ChatList'
 import _ from 'lodash'
-import { IUser } from '../../interface/users'
+import { IUserChatList } from '../../interface/users'
 import useStore from '../../stores/store'
 
 interface SearchProps {
-  setSearchUsers: (val: IUser[]) => void
+  dataChatList: IUserChatList[]
+  setSearchUsers: (val: IUserChatList[]) => void
 }
 
 const Search = (props: SearchProps) => {
@@ -20,20 +20,18 @@ const Search = (props: SearchProps) => {
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      const filter = _.filter(dataUserList.data, (user) => {
-        return _.includes(
-          _.lowerCase(JSON.stringify(_.values(user.accountId))).replace(/\s/g, ''),
-          _.lowerCase(searchValue),
-        )
+      const filter = _.filter(props.dataChatList, (user) => {
+        return _.includes(_.lowerCase(JSON.stringify(_.values(user))).replace(/\s/g, ''), _.lowerCase(searchValue))
       })
       props.setSearchUsers(filter)
     }, 100)
     return () => clearTimeout(timeout)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchValue, dataUserList])
+  }, [searchValue, props.dataChatList])
 
   const onCLickSetting = () => {
     store.setIsSetting(!store.isSetting)
+    store.setIsUserDetail(false)
   }
 
   return (
