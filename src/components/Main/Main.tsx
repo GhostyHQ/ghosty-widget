@@ -78,21 +78,43 @@ const Main = () => {
         <ScrollableFeed>
           {messages?.map((msg, idx) =>
             currentUser === msg.senderId ? (
-              <Box
-                key={idx}
-                className={clsx(
-                  'flex justify-end py-0.5 mx-3',
-                  messages.length - 1 === idx && 'pb-2',
-                  idx === 0 && 'pt-2',
-                )}
-              >
-                <Box bg='blue.100' ml='16' className='p-2 rounded-md'>
-                  <Text className='text-[11px]'>{msg.message.text}</Text>
-                  <Text className='text-right text-[10px] text-gray-500'>
-                    {moment(msg.createdAt).startOf('minute').fromNow()}
-                  </Text>
+              msg.message.image === '' ? (
+                <Box
+                  key={idx}
+                  className={clsx(
+                    'flex justify-end py-0.5 mx-3',
+                    messages.length - 1 === idx && 'pb-2',
+                    idx === 0 && 'pt-2',
+                  )}
+                >
+                  <Box bg='blue.100' ml='16' className='p-2 rounded-md'>
+                    <Text className='text-[11px]'>{msg.message.text}</Text>
+                    <Text className='text-right text-[10px] text-gray-500'>
+                      {moment(msg.createdAt).startOf('minute').fromNow()}
+                    </Text>
+                  </Box>
                 </Box>
-              </Box>
+              ) : (
+                <Box
+                  key={idx}
+                  className={clsx(
+                    'flex justify-end py-0.5 mx-3',
+                    messages.length - 1 === idx && 'pb-2',
+                    idx === 0 && 'pt-2',
+                  )}
+                >
+                  <Box bg='blue.100' ml='16' className='p-2 rounded-md'>
+                    <img
+                      className='cursor-pointer'
+                      src={`https://paras-cdn.imgix.net/${msg.message.image}?width=800`}
+                      width={400}
+                    />
+                    <Text className='text-right text-[10px] text-gray-500'>
+                      {moment(msg.createdAt).startOf('minute').fromNow()}
+                    </Text>
+                  </Box>
+                </Box>
+              )
             ) : (
               <Box
                 key={idx}

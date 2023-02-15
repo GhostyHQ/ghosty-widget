@@ -26,7 +26,9 @@ const Header = () => {
           {true && <AvatarBadge boxSize='1em' bg='green.500' />}
         </Avatar>
         <Box>
-          <Text className='text-xs'>{prettyTruncate(currentChat?.accountChatList, 20, 'address')}</Text>
+          <Text className='text-xs'>
+            {prettyTruncate(currentChat?.alias || currentChat?.accountChatList, 20, 'address')}
+          </Text>
           {true && <Text className='text-[9px] text-green-500'>Online</Text>}
         </Box>
       </Box>
