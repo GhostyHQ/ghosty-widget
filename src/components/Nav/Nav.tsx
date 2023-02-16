@@ -6,13 +6,14 @@ import { IUserChatList } from '../../interface/users'
 import useStore from '../../stores/store'
 import useSWR from 'swr'
 import axios from 'axios'
+import { API_URL } from '../../utils/baseUrl'
 
 const Nav = () => {
   const [filteredUsers, setFilteredUsers] = useState<IUserChatList[]>()
   const store = useStore()
 
   const fetchProfile = async () => {
-    const res = await axios.get(`http://localhost:9090/api/profile/chatlist`, {
+    const res = await axios.get(`${API_URL}/api/profile/chatlist`, {
       params: {
         accountId: store.currentUser,
       },
@@ -20,7 +21,7 @@ const Nav = () => {
     return (await res.data.data) || null
   }
 
-  const { data } = useSWR(store.currentUser, fetchProfile)
+  const { data } = useSWR(`chatlist-${store.currentUser}`, fetchProfile)
 
   return (
     <Box>

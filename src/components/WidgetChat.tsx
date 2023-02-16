@@ -9,6 +9,7 @@ import useStore from '../stores/store'
 import Footer from './Footer/Footer'
 import axios from 'axios'
 import { LogoGhosty } from './Icons/Logo'
+import { API_URL } from '../utils/baseUrl'
 
 interface WidgetChatProps {
   currentUser: string
@@ -27,7 +28,7 @@ const WidgetChat = ({ currentUser, generateAuthToken }: WidgetChatProps) => {
 
   const _init = async () => {
     if (currentUser) {
-      const res = await axios.get(`http://localhost:9090/api/profile`, {
+      const res = await axios.get(`${API_URL}/api/profile`, {
         params: {
           accountId: currentUser,
         },
@@ -39,7 +40,7 @@ const WidgetChat = ({ currentUser, generateAuthToken }: WidgetChatProps) => {
         formData.append('accountId', currentUser)
 
         try {
-          const resp = await axios.put(`http://localhost:9090/api/profiles`, formData, {
+          const resp = await axios.put(`${API_URL}/api/profiles`, formData, {
             headers: {
               'Content-Type': 'application/json',
               authorization: await generateAuthToken,
@@ -73,10 +74,10 @@ const WidgetChat = ({ currentUser, generateAuthToken }: WidgetChatProps) => {
         {currentUser ? (
           <Box className='relative mx-8'>
             <Portal>
-              <PopoverContent minW='lg' minH='sm' className='absolute rounded-lg'>
+              <PopoverContent minW='lg' minH='sm' className='absolute mx-8 rounded-lg'>
                 <Grid
                   templateAreas={
-                    currentChat && !store.isSetting && !store.isUserDetail
+                    currentChat && !store.isAddUser && !store.isSetting && !store.isUserDetail
                       ? `"nav header"
         "nav main"
         "nav footer"`
@@ -89,7 +90,7 @@ const WidgetChat = ({ currentUser, generateAuthToken }: WidgetChatProps) => {
                   h='sm'
                   fontFamily='manrope'
                 >
-                  {currentChat && !store.isSetting && !store.isUserDetail && (
+                  {currentChat && !store.isAddUser && !store.isSetting && !store.isUserDetail && (
                     <GridItem area={'header'} shadow='md' className='rounded-tr-md p-2'>
                       <Header />
                     </GridItem>
@@ -100,7 +101,7 @@ const WidgetChat = ({ currentUser, generateAuthToken }: WidgetChatProps) => {
                   <GridItem area={'main'}>
                     <Main />
                   </GridItem>
-                  {currentChat && !store.isSetting && !store.isUserDetail && (
+                  {currentChat && !store.isAddUser && !store.isSetting && !store.isUserDetail && (
                     <GridItem area={'footer'} className='relative'>
                       <Footer />
                     </GridItem>

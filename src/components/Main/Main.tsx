@@ -13,13 +13,14 @@ import ScrollableFeed from 'react-scrollable-feed'
 import clsx from 'clsx'
 import moment from 'moment'
 import UserDetail from '../UserDetail/UserDetail'
+import AddUser from '../AddUser/AddUser'
+import { API_URL } from '../../utils/baseUrl'
 
 const Main = () => {
   const [currentChat, setCurrentChat] = useState<IUserChatList>()
   const [messages, setMessages] = useState<IMessages[]>()
   const [isValidating, setIsValidating] = useState<boolean>(false)
   const store = useStore()
-  const currentUser = 'testingbaleee.testnet'
 
   useEffect(() => {
     if (localStorage['current-chat']) {
@@ -31,7 +32,7 @@ const Main = () => {
     const getMessage = async () => {
       setIsValidating(true)
       try {
-        const res = await axios.get(`http://localhost:9090/api/get-message/${currentChat?.accountChatList}`, {
+        const res = await axios.get(`${API_URL}/api/get-message/${currentChat?.accountChatList}`, {
           headers: {
             'Content-Type': 'application/json',
             authorization: await store.authToken,
@@ -53,9 +54,11 @@ const Main = () => {
   }, [currentChat])
 
   if (store.isUserDetail) {
-    return (
-      <UserDetail dataCurrentChat={messages as IMessages[]} currentChatId={currentChat?.accountChatList as string} />
-    )
+    return <UserDetail dataCurrentMessage={messages as IMessages[]} dataCurrentChat={currentChat as IUserChatList} />
+  }
+
+  if (store.isAddUser) {
+    return <AddUser />
   }
 
   if (store.isSetting) {
@@ -77,7 +80,7 @@ const Main = () => {
       ) : messages?.length !== 0 ? (
         <ScrollableFeed>
           {messages?.map((msg, idx) =>
-            currentUser === msg.senderId ? (
+            store.currentUser === msg.senderId ? (
               msg.message.image === '' ? (
                 <Box
                   key={idx}
@@ -115,7 +118,7 @@ const Main = () => {
                   </Box>
                 </Box>
               )
-            ) : (
+            ) : msg.message.image === '' ? (
               <Box
                 key={idx}
                 className={clsx('flex gap-2 py-0.5 mx-3', messages.length - 1 === idx && 'pb-2', idx === 0 && 'pt-2')}
@@ -123,6 +126,23 @@ const Main = () => {
                 <Avatar size='xs' name={currentChat?.accountChatList} src={currentChat?.accountChatList} />
                 <Box bg='gray.100' mr='16' className='p-2 rounded-md'>
                   <Text className='text-[11px]'>{msg.message.text}</Text>
+                  <Text className='text-right text-[10px] text-gray-500'>
+                    {moment(msg.createdAt).startOf('minute').fromNow()}
+                  </Text>
+                </Box>
+              </Box>
+            ) : (
+              <Box
+                key={idx}
+                className={clsx('flex gap-2 py-0.5 mx-3', messages.length - 1 === idx && 'pb-2', idx === 0 && 'pt-2')}
+              >
+                <Avatar size='xs' name={currentChat?.accountChatList} src={currentChat?.accountChatList} />
+                <Box bg='gray.100' mr='16' className='p-2 rounded-md'>
+                  <img
+                    className='cursor-pointer'
+                    src={`https://paras-cdn.imgix.net/${msg.message.image}?width=800`}
+                    width={400}
+                  />
                   <Text className='text-right text-[10px] text-gray-500'>
                     {moment(msg.createdAt).startOf('minute').fromNow()}
                   </Text>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Box, Text } from '@chakra-ui/react'
-import { IconGear, IconSearch } from '../Icons/Icon'
+import { IconGear, IconPlus, IconSearch } from '../Icons/Icon'
 import _ from 'lodash'
 import { IUserChatList } from '../../interface/users'
 import useStore from '../../stores/store'
@@ -29,17 +29,29 @@ const Search = (props: SearchProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchValue, props.dataChatList])
 
+  const onCLickAddAddress = () => {
+    store.setIsAddUser(!store.isAddUser)
+    store.setIsUserDetail(false)
+    store.setIsSetting(false)
+  }
+
   const onCLickSetting = () => {
     store.setIsSetting(!store.isSetting)
     store.setIsUserDetail(false)
+    store.setIsAddUser(false)
   }
 
   return (
     <Box>
       <Box className='flex justify-between items-center gap-2'>
         <Text color='black'>Chat</Text>
-        <Box className='cursor-pointer' onClick={onCLickSetting}>
-          <IconGear size={22} color='black' />
+        <Box className='flex justify-between items-center gap-2'>
+          <Box className='cursor-pointer' onClick={onCLickAddAddress}>
+            <IconPlus size={22} color='black' />
+          </Box>
+          <Box className='cursor-pointer' onClick={onCLickSetting}>
+            <IconGear size={22} color='black' />
+          </Box>
         </Box>
       </Box>
       <Box className='flex items-center gap-1 p-1 mt-2 text-xs font-thin border border-black rounded-full'>

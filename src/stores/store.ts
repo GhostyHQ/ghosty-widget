@@ -11,6 +11,8 @@ export interface IStore {
   setUserProfile: (val: object) => void
   chatList: object
   setChatList: (val: object) => void
+  isAddUser: boolean
+  setIsAddUser: (val: boolean) => void
   isSetting: boolean
   setIsSetting: (val: boolean) => void
   isUserDetail: boolean
@@ -30,6 +32,8 @@ const useStore = create<IStore>((set) => ({
   setUserProfile: (val: object) => set(() => ({ userProfile: val })),
   chatList: {},
   setChatList: (val: object) => set(() => ({ userProfile: val })),
+  isAddUser: false,
+  setIsAddUser: (val: boolean) => set(() => ({ isAddUser: val })),
   isSetting: false,
   setIsSetting: (val: boolean) => set(() => ({ isSetting: val })),
   isUserDetail: false,

@@ -6,6 +6,7 @@ import useStore from '../../stores/store'
 import { IUserChatList } from '../../interface/users'
 import axios from 'axios'
 import clsx from 'clsx'
+import { API_URL } from '../../utils/baseUrl'
 
 const Footer = () => {
   const [currentChat, setCurrentChat] = useState<IUserChatList>()
@@ -37,7 +38,7 @@ const Footer = () => {
     setMessage('')
 
     try {
-      const res = await axios.post(`http://localhost:9090/api/send-message`, messageData, {
+      const res = await axios.post(`${API_URL}/api/send-message`, messageData, {
         headers: { authorization: await store.authToken },
       })
 
@@ -54,7 +55,7 @@ const Footer = () => {
     }
 
     try {
-      await axios.post(`http://localhost:9090/api/delivered-message`, data, {
+      await axios.post(`${API_URL}/api/delivered-message`, data, {
         headers: {
           'Content-Type': 'application/json',
           authorization: await store.authToken,
