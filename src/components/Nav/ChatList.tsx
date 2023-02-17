@@ -29,6 +29,7 @@ const ChatList = (props: ChatListProps) => {
     store.setIsAddUser(false)
     store.setIsSetting(false)
     store.setIsUserDetail(false)
+    store.setIsSetNickname(false)
   }
 
   return (
@@ -55,7 +56,13 @@ const ChatList = (props: ChatListProps) => {
                   </Avatar>
                   <Box>
                     <Text className='text-[10px] font-semibold'>
-                      {prettyTruncate(user.alias || user.accountChatList, 14, 'address')}
+                      {prettyTruncate(
+                        (store.alias?.accountId === user.accountChatList && store.alias.alias) ||
+                          user.alias ||
+                          user.accountChatList,
+                        14,
+                        'address',
+                      )}
                     </Text>
                     <Text className='text-[9px]'>
                       {moment(user.lastMessage[0]?.createdAt).startOf('minute').fromNow()}

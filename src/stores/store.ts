@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { IAlias } from '../interface/users'
 
 export interface IStore {
   currentUser: string | null
@@ -19,6 +20,10 @@ export interface IStore {
   setIsUserDetail: (val: boolean) => void
   isClickCurrentUser: boolean
   setIsClickCurrentUser: (val: boolean) => void
+  isSetNickname: boolean
+  setIsSetNickname: (val: boolean) => void
+  alias: IAlias | null
+  setAlias: (val: IAlias) => void
 }
 
 const useStore = create<IStore>((set) => ({
@@ -40,6 +45,10 @@ const useStore = create<IStore>((set) => ({
   setIsUserDetail: (val: boolean) => set(() => ({ isUserDetail: val })),
   isClickCurrentUser: false,
   setIsClickCurrentUser: (val: boolean) => set(() => ({ isClickCurrentUser: val })),
+  isSetNickname: false,
+  setIsSetNickname: (val: boolean) => set(() => ({ isSetNickname: val })),
+  alias: null,
+  setAlias: (val: IAlias) => set(() => ({ alias: val })),
 }))
 
 export default useStore

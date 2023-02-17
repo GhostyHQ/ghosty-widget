@@ -15,6 +15,7 @@ import moment from 'moment'
 import UserDetail from '../UserDetail/UserDetail'
 import AddUser from '../AddUser/AddUser'
 import { API_URL } from '../../utils/baseUrl'
+import SetNickname from '../SetNickname/SetNickname'
 
 const Main = () => {
   const [currentChat, setCurrentChat] = useState<IUserChatList>()
@@ -52,6 +53,10 @@ const Main = () => {
     getMessage()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentChat])
+
+  if (store.isSetNickname) {
+    return <SetNickname />
+  }
 
   if (store.isUserDetail) {
     return <UserDetail dataCurrentMessage={messages as IMessages[]} dataCurrentChat={currentChat as IUserChatList} />

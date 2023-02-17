@@ -46,10 +46,13 @@ const Search = (props: SearchProps) => {
       <Box className='flex justify-between items-center gap-2'>
         <Text color='black'>Chat</Text>
         <Box className='flex justify-between items-center gap-2'>
-          <Box className='cursor-pointer' onClick={onCLickAddAddress}>
+          <Box
+            className='p-1 hover:bg-black hover:bg-opacity-5 rounded-full cursor-pointer'
+            onClick={onCLickAddAddress}
+          >
             <IconPlus size={22} color='black' />
           </Box>
-          <Box className='cursor-pointer' onClick={onCLickSetting}>
+          <Box className='p-1 hover:bg-black hover:bg-opacity-5 rounded-full cursor-pointer' onClick={onCLickSetting}>
             <IconGear size={22} color='black' />
           </Box>
         </Box>

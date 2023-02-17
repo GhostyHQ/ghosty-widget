@@ -32,3 +32,8 @@ export interface IChatList {
   accountId: string
   alias: string
 }
+
+export interface IAlias {
+  accountId: string
+  alias: string
+}

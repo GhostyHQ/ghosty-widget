@@ -27,7 +27,13 @@ const Header = () => {
         </Avatar>
         <Box>
           <Text className='text-xs'>
-            {prettyTruncate(currentChat?.alias || currentChat?.accountChatList, 20, 'address')}
+            {prettyTruncate(
+              (store.alias?.accountId === currentChat?.accountChatList && store.alias?.alias) ||
+                currentChat?.alias ||
+                currentChat?.accountChatList,
+              20,
+              'address',
+            )}
           </Text>
           {true && <Text className='text-[9px] text-green-500'>Online</Text>}
         </Box>

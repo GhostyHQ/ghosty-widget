@@ -77,7 +77,7 @@ const WidgetChat = ({ currentUser, generateAuthToken }: WidgetChatProps) => {
               <PopoverContent minW='lg' minH='sm' className='absolute mx-8 rounded-lg'>
                 <Grid
                   templateAreas={
-                    currentChat && !store.isAddUser && !store.isSetting && !store.isUserDetail
+                    currentChat && !store.isAddUser && !store.isSetting && !store.isUserDetail && !store.isSetNickname
                       ? `"nav header"
         "nav main"
         "nav footer"`
@@ -90,22 +90,30 @@ const WidgetChat = ({ currentUser, generateAuthToken }: WidgetChatProps) => {
                   h='sm'
                   fontFamily='manrope'
                 >
-                  {currentChat && !store.isAddUser && !store.isSetting && !store.isUserDetail && (
-                    <GridItem area={'header'} shadow='md' className='rounded-tr-md p-2'>
-                      <Header />
-                    </GridItem>
-                  )}
+                  {currentChat &&
+                    !store.isAddUser &&
+                    !store.isSetting &&
+                    !store.isUserDetail &&
+                    !store.isSetNickname && (
+                      <GridItem area={'header'} shadow='md' className='rounded-tr-md p-2'>
+                        <Header />
+                      </GridItem>
+                    )}
                   <GridItem area={'nav'} className='rounded-l-md border-r p-2'>
                     <Nav />
                   </GridItem>
                   <GridItem area={'main'}>
                     <Main />
                   </GridItem>
-                  {currentChat && !store.isAddUser && !store.isSetting && !store.isUserDetail && (
-                    <GridItem area={'footer'} className='relative'>
-                      <Footer />
-                    </GridItem>
-                  )}
+                  {currentChat &&
+                    !store.isAddUser &&
+                    !store.isSetting &&
+                    !store.isUserDetail &&
+                    !store.isSetNickname && (
+                      <GridItem area={'footer'} className='relative'>
+                        <Footer />
+                      </GridItem>
+                    )}
                 </Grid>
               </PopoverContent>
             </Portal>

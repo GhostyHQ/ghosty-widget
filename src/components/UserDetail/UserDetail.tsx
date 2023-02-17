@@ -7,7 +7,6 @@ import {
   Avatar,
   Box,
   Text,
-  useDisclosure,
 } from '@chakra-ui/react'
 import React, { Fragment } from 'react'
 import { IMessages } from '../../interface/messages'
@@ -23,12 +22,15 @@ interface UserDetailProps {
 }
 
 const UserDetail = ({ dataCurrentMessage, dataCurrentChat }: UserDetailProps) => {
-  const { onOpen } = useDisclosure()
   const store = useStore()
 
   const hasMedia = dataCurrentMessage?.some(
     (msg) => msg.message.image !== '' && (msg.senderId === store.currentUser || msg.receiverId === store.currentUser),
   )
+
+  const onClickSetNickname = () => {
+    store.setIsSetNickname(true)
+  }
 
   return (
     <Box className='mt-2 text-center'>
@@ -37,7 +39,15 @@ const UserDetail = ({ dataCurrentMessage, dataCurrentChat }: UserDetailProps) =>
         name={dataCurrentChat?.accountChatList}
         src={`https://bit.ly/${dataCurrentChat?.accountChatList}`}
       />
-      <Text className='mt-1 text-md'>{prettyTruncate(dataCurrentChat?.accountChatList, 24, 'address')}</Text>
+      <Text className='mt-1 text-md'>
+        {prettyTruncate(
+          (store.alias?.accountId === dataCurrentChat?.accountChatList && store.alias?.alias) ||
+            dataCurrentChat?.alias ||
+            dataCurrentChat?.accountChatList,
+          24,
+          'address',
+        )}
+      </Text>
       <Text className='text-[12px] text-green-500'>Online</Text>
       <Accordion allowToggle className='mt-4'>
         <AccordionItem>
@@ -50,7 +60,7 @@ const UserDetail = ({ dataCurrentMessage, dataCurrentChat }: UserDetailProps) =>
           <AccordionPanel pb={4}>
             <Box
               className='flex items-center gap-2 p-2 rounded-md cursor-pointer hover:bg-neutral-200 transition duration-200'
-              onClick={onOpen}
+              onClick={onClickSetNickname}
             >
               <IconTag size={18} />
               <Text>Set Nickname</Text>
