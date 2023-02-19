@@ -5,11 +5,11 @@ import clsx from 'clsx'
 import { IUserChatList } from '../../interface/users'
 import { LogoBeardedMan, LogoThinking } from '../Icons/Logo'
 import useStore from '../../stores/store'
-import moment from 'moment'
 
 interface ChatListProps {
   dataChatList: IUserChatList[]
   filteredUsers: IUserChatList[]
+  isValidating: boolean
 }
 
 const ChatList = (props: ChatListProps) => {
@@ -52,7 +52,9 @@ const ChatList = (props: ChatListProps) => {
                   onClick={() => onClickCurrentUser(user)}
                 >
                   <Avatar size='sm' name={user.accountChatList} src={`https://bit.ly/${user.accountChatList}`}>
-                    {true && <AvatarBadge boxSize='1em' bg='green.500' />}
+                    {store.activeUser?.some((u) => u.currentUser === user.accountChatList) && (
+                      <AvatarBadge boxSize='1em' bg='green.500' />
+                    )}
                   </Avatar>
                   <Box>
                     <Text className='text-[10px] font-semibold'>
@@ -64,9 +66,13 @@ const ChatList = (props: ChatListProps) => {
                         'address',
                       )}
                     </Text>
-                    <Text className='text-[9px]'>
-                      {moment(user.lastMessage[0]?.createdAt).startOf('minute').fromNow()}
-                    </Text>
+                    {user.lastMessage[0].message.image !== '' ? (
+                      <Text className='text-[9px]'>Send Image</Text>
+                    ) : user.lastMessage[0].message.text !== '' ? (
+                      <Text className='text-[9px]'>{prettyTruncate(user.lastMessage[0].message.text, 16, '')}</Text>
+                    ) : (
+                      <Text className='text-[9px]'>New Chat👻</Text>
+                    )}
                   </Box>
                 </Box>
               </Tooltip>

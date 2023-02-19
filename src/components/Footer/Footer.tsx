@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { Box, Popover, PopoverArrow, PopoverContent, PopoverTrigger, useDisclosure } from '@chakra-ui/react'
 import { IconFaceSmile, IconPhoto, IconSend } from '../Icons/Icon'
 import EmojiPicker from 'emoji-picker-react'
@@ -7,6 +7,7 @@ import { IUserChatList } from '../../interface/users'
 import axios from 'axios'
 import clsx from 'clsx'
 import { API_URL } from '../../utils/baseUrl'
+import { SocketContext } from '../../contexts/SocketContext'
 
 const Footer = () => {
   const [currentChat, setCurrentChat] = useState<IUserChatList>()
@@ -15,6 +16,16 @@ const Footer = () => {
   const { isOpen, onToggle, onClose } = useDisclosure()
   const ref = useRef<HTMLTextAreaElement>(null)
   const store = useStore()
+  const socket = useContext(SocketContext)
+
+  useEffect(() => {
+    socket.emit('typingMessage', {
+      senderId: store.currentUser,
+      receiverId: currentChat?.accountChatList,
+      message: message,
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [message])
 
   useEffect(() => {
     if (localStorage['current-chat']) {
@@ -34,6 +45,17 @@ const Footer = () => {
       receiverId: currentChat?.accountChatList,
       message: message,
     }
+
+    socket.emit('sendMessage', {
+      senderId: store.currentUser,
+      receiverId: currentChat?.accountChatList,
+      message: {
+        text: message,
+        image: '',
+      },
+      time: new Date(),
+      is_new: store.messages ? true : false,
+    })
 
     setMessage('')
 

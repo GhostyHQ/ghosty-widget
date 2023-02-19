@@ -22,6 +22,21 @@ const Main = () => {
   const [messages, setMessages] = useState<IMessages[]>()
   const [isValidating, setIsValidating] = useState<boolean>(false)
   const store = useStore()
+  const messageSocket = store.messages
+
+  useEffect(() => {
+    if (messageSocket) {
+      if (
+        (messageSocket?.senderId === currentChat?.accountChatList && messageSocket?.receiverId === store.currentUser) ||
+        (messageSocket?.senderId === store.currentUser && messageSocket?.receiverId === currentChat?.accountChatList)
+      ) {
+        setMessages([...(messages as IMessages[]), messageSocket])
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [messageSocket])
+
+  console.log('messageSocket', messageSocket)
 
   useEffect(() => {
     if (localStorage['current-chat']) {
@@ -30,29 +45,29 @@ const Main = () => {
   }, [store.isClickCurrentUser, store.isUserDetail])
 
   useEffect(() => {
-    const getMessage = async () => {
-      setIsValidating(true)
-      try {
-        const res = await axios.get(`${API_URL}/api/get-message/${currentChat?.accountChatList}`, {
-          headers: {
-            'Content-Type': 'application/json',
-            authorization: await store.authToken,
-          },
-        })
-        const result = res.data.data.filter(
-          (message: any) =>
-            message.senderId === currentChat?.accountId || message.receiverId === currentChat?.accountId,
-        )
-        setMessages(result)
-      } catch (error) {
-        console.log(error)
-      }
-      setIsValidating(false)
-    }
-
     getMessage()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentChat])
+
+  const getMessage = async () => {
+    setIsValidating(true)
+    try {
+      const res = await axios.get(`${API_URL}/api/get-message/${currentChat?.accountChatList}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          authorization: await store.authToken,
+        },
+      })
+      store.setMessages(res.data.data)
+      const result = res.data.data.filter(
+        (message: any) => message.senderId === currentChat?.accountId || message.receiverId === currentChat?.accountId,
+      )
+      setMessages(result)
+    } catch (error) {
+      console.log(error)
+    }
+    setIsValidating(false)
+  }
 
   if (store.isSetNickname) {
     return <SetNickname />
@@ -171,6 +186,20 @@ const Main = () => {
           </Box>
         </Box>
       )}
+      {store.typingMessage &&
+        store.typingMessage.message &&
+        store.typingMessage.senderId === currentChat.accountChatList && (
+          <Box bg='gray.100' className='flex items-center gap-2 z-50 absolute bottom-10 p-1 rounded-t-lg'>
+            <Box className='flex flex-col justify-end w-6 h-6'>
+              <Avatar
+                size='xs'
+                name={currentChat?.accountChatList}
+                src={`https://bit.ly/${currentChat?.accountChatList}`}
+              />
+            </Box>
+            <Text className='text-xs text-black'>typing message...</Text>
+          </Box>
+        )}
     </Box>
   )
 }

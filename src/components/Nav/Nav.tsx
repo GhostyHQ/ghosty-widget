@@ -21,12 +21,12 @@ const Nav = () => {
     return (await res.data.data) || null
   }
 
-  const { data } = useSWR(`chatlist-${store.currentUser}`, fetchProfile)
+  const { data, isValidating } = useSWR(`chatlist-${store.currentUser}`, fetchProfile)
 
   return (
     <Box>
       <Search dataChatList={data} setSearchUsers={(e) => setFilteredUsers(e)} />
-      <ChatList dataChatList={data} filteredUsers={filteredUsers as IUserChatList[]} />
+      <ChatList dataChatList={data} filteredUsers={filteredUsers as IUserChatList[]} isValidating={isValidating} />
     </Box>
   )
 }

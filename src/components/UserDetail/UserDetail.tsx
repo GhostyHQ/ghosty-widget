@@ -48,7 +48,9 @@ const UserDetail = ({ dataCurrentMessage, dataCurrentChat }: UserDetailProps) =>
           'address',
         )}
       </Text>
-      <Text className='text-[12px] text-green-500'>Online</Text>
+      {store.activeUser?.some((u) => u.currentUser === dataCurrentChat?.accountChatList) && (
+        <Text className='text-[12px] text-green-500'>Online</Text>
+      )}
       <Accordion allowToggle className='mt-4'>
         <AccordionItem>
           <AccordionButton>

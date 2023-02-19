@@ -23,7 +23,9 @@ const Header = () => {
     <Box className='flex justify-between items-center'>
       <Box className='flex items-center gap-2'>
         <Avatar size='sm' name={currentChat?.accountChatList} src={`https://bit.ly/${currentChat?.accountChatList}`}>
-          {true && <AvatarBadge boxSize='1em' bg='green.500' />}
+          {store.activeUser?.some((u) => u.currentUser === currentChat?.accountChatList) && (
+            <AvatarBadge boxSize='1em' bg='green.500' />
+          )}
         </Avatar>
         <Box>
           <Text className='text-xs'>
@@ -35,7 +37,9 @@ const Header = () => {
               'address',
             )}
           </Text>
-          {true && <Text className='text-[9px] text-green-500'>Online</Text>}
+          {store.activeUser?.some((u) => u.currentUser === currentChat?.accountChatList) && (
+            <Text className='text-[9px] text-green-500'>Online</Text>
+          )}
         </Box>
       </Box>
       <Box className='cursor-pointer' onClick={onClickUserDetail}>

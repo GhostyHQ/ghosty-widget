@@ -1,5 +1,6 @@
 import { create } from 'zustand'
-import { IAlias } from '../interface/users'
+import { IMessages, ITypingMessage } from '../interface/messages'
+import { IActiveUser, IAlias } from '../interface/users'
 
 export interface IStore {
   currentUser: string | null
@@ -24,6 +25,13 @@ export interface IStore {
   setIsSetNickname: (val: boolean) => void
   alias: IAlias | null
   setAlias: (val: IAlias) => void
+  // socket
+  activeUser: IActiveUser[] | null
+  setActiveUser: (val: IActiveUser[]) => void
+  typingMessage: ITypingMessage | null
+  setTypingMessage: (val: ITypingMessage) => void
+  messages: IMessages | null
+  setMessages: (val: IMessages) => void
 }
 
 const useStore = create<IStore>((set) => ({
@@ -49,6 +57,13 @@ const useStore = create<IStore>((set) => ({
   setIsSetNickname: (val: boolean) => set(() => ({ isSetNickname: val })),
   alias: null,
   setAlias: (val: IAlias) => set(() => ({ alias: val })),
+  // socket
+  activeUser: null,
+  setActiveUser: (val: IActiveUser[]) => set(() => ({ activeUser: val })),
+  typingMessage: null,
+  setTypingMessage: (val: ITypingMessage) => set(() => ({ typingMessage: val })),
+  messages: null,
+  setMessages: (val: IMessages) => set(() => ({ messages: val })),
 }))
 
 export default useStore

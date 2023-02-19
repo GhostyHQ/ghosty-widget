@@ -11,3 +11,9 @@ export interface IMessage {
   text: string
   image: string
 }
+
+export interface ITypingMessage {
+  senderId: string
+  receiverId: string
+  message: string
+}

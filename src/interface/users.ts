@@ -37,3 +37,8 @@ export interface IAlias {
   accountId: string
   alias: string
 }
+
+export interface IActiveUser {
+  currentUser: string | null
+  socketId: string
+}

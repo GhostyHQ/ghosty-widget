@@ -33,12 +33,14 @@ const Search = (props: SearchProps) => {
     store.setIsAddUser(!store.isAddUser)
     store.setIsUserDetail(false)
     store.setIsSetting(false)
+    store.setIsSetNickname(false)
   }
 
   const onCLickSetting = () => {
     store.setIsSetting(!store.isSetting)
     store.setIsUserDetail(false)
     store.setIsAddUser(false)
+    store.setIsSetNickname(false)
   }
 
   return (
