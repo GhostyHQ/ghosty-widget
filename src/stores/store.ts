@@ -32,6 +32,8 @@ export interface IStore {
   setTypingMessage: (val: ITypingMessage) => void
   messages: IMessages | null
   setMessages: (val: IMessages) => void
+  delivered: IMessages | null
+  setDelivered: (val: IMessages) => void
 }
 
 const useStore = create<IStore>((set) => ({
@@ -64,6 +66,8 @@ const useStore = create<IStore>((set) => ({
   setTypingMessage: (val: ITypingMessage) => set(() => ({ typingMessage: val })),
   messages: null,
   setMessages: (val: IMessages) => set(() => ({ messages: val })),
+  delivered: null,
+  setDelivered: (val: IMessages) => set(() => ({ delivered: val })),
 }))
 
 export default useStore

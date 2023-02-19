@@ -5,6 +5,7 @@ import clsx from 'clsx'
 import { IUserChatList } from '../../interface/users'
 import { LogoBeardedMan, LogoThinking } from '../Icons/Logo'
 import useStore from '../../stores/store'
+import { IMessages } from '../../interface/messages'
 
 interface ChatListProps {
   dataChatList: IUserChatList[]
@@ -14,14 +15,28 @@ interface ChatListProps {
 
 const ChatList = (props: ChatListProps) => {
   const [activeChat, setActiveChat] = useState<string>()
+  const [lastMessage, setLastMessage] = useState<IMessages>()
   const store = useStore()
+  const messageSocket = store.messages
+
+  useEffect(() => {
+    if (messageSocket) {
+      if (
+        (messageSocket?.senderId === activeChat && messageSocket?.receiverId === store.currentUser) ||
+        (messageSocket?.senderId === store.currentUser && messageSocket?.receiverId === activeChat)
+      ) {
+        setLastMessage(messageSocket)
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [messageSocket])
 
   useEffect(() => {
     if (localStorage['current-chat']) {
       const data = JSON.parse(localStorage.getItem('current-chat') || '')
       setActiveChat(data.accountChatList)
     }
-  }, [store.isClickCurrentUser])
+  }, [store.isClickCurrentUser, messageSocket])
 
   const onClickCurrentUser = (user: IUserChatList) => {
     localStorage.setItem('current-chat', JSON.stringify(user))
@@ -66,10 +81,21 @@ const ChatList = (props: ChatListProps) => {
                         'address',
                       )}
                     </Text>
-                    {user.lastMessage[0].message.image !== '' ? (
+                    {user.lastMessage[0] && user.lastMessage[0].message.text !== '' ? (
+                      <Text className='text-[9px]'>
+                        {prettyTruncate(
+                          (lastMessage?.receiverId === user.accountChatList &&
+                            lastMessage.senderId === user.accountId) ||
+                            (lastMessage?.receiverId === user.accountId &&
+                              lastMessage.senderId === user.accountChatList)
+                            ? lastMessage.message.text
+                            : user.lastMessage[0].message.text,
+                          16,
+                          '',
+                        )}
+                      </Text>
+                    ) : user.lastMessage[0] && user.lastMessage[0].message.image !== '' ? (
                       <Text className='text-[9px]'>Send Image</Text>
-                    ) : user.lastMessage[0].message.text !== '' ? (
-                      <Text className='text-[9px]'>{prettyTruncate(user.lastMessage[0].message.text, 16, '')}</Text>
                     ) : (
                       <Text className='text-[9px]'>New Chat👻</Text>
                     )}

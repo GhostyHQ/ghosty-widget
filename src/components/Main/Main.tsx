@@ -36,8 +36,6 @@ const Main = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messageSocket])
 
-  console.log('messageSocket', messageSocket)
-
   useEffect(() => {
     if (localStorage['current-chat']) {
       setCurrentChat(JSON.parse(localStorage.getItem('current-chat') || ''))
