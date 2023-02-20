@@ -3,10 +3,16 @@ import { render } from '@testing-library/react'
 
 import 'jest-canvas-mock'
 
-import { MyCounter } from '../src'
+import { WidgetChat } from '../src/index'
 
 describe('Common render', () => {
   it('renders without crashing', () => {
-    render(<MyCounter />)
+    render(
+      <WidgetChat
+        currentUser='testingbaleee.testnet'
+        generateAuthToken={Promise.resolve('1234567889')}
+        partnership='Paras Marketplace'
+      />,
+    )
   })
 })
