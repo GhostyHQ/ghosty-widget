@@ -50,7 +50,12 @@ const Main = () => {
   const getMessage = async () => {
     setIsValidating(true)
     try {
-      const res = await axios.get(`${API_URL}/api/get-message/${currentChat?.accountChatList}`, {
+      const res = await axios.get(`${API_URL}/api/get-message`, {
+        params: {
+          id: currentChat?.accountChatList,
+          __limit: 50,
+          __skip: 0,
+        },
         headers: {
           'Content-Type': 'application/json',
           authorization: await store.authToken,

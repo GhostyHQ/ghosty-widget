@@ -4,7 +4,7 @@ import { Logo } from '../Icons/Logo'
 
 const ButtonChat = () => {
   return (
-    <Box className='fixed bottom-4 right-8'>
+    <Box className='fixed bottom-4 right-8 z-20'>
       <PopoverTrigger>
         <Box className='flex items-center gap-2 px-3 py-2 rounded-full bg-white shadow-2xl border cursor-pointer hover:bg-opacity-90 transition duration-150'>
           <Logo size={25} />
