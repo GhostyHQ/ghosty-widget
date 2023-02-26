@@ -21,15 +21,12 @@ const ChatList = (props: ChatListProps) => {
 
   useEffect(() => {
     if (messageSocket) {
-      if (
-        (messageSocket?.senderId === activeChat && messageSocket?.receiverId === store.currentUser) ||
-        (messageSocket?.senderId === store.currentUser && messageSocket?.receiverId === activeChat)
-      ) {
+      if (messageSocket?.senderId === store.currentUser || messageSocket?.receiverId === store.currentUser) {
         setLastMessage(messageSocket)
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [messageSocket])
+  }, [JSON.stringify(messageSocket)])
 
   useEffect(() => {
     if (localStorage['current-chat']) {

@@ -8,8 +8,8 @@ import { IUser } from '../interface/users'
 import useStore from '../stores/store'
 import Footer from './Footer/Footer'
 import axios from 'axios'
-import { LogoGhosty } from './Icons/Logo'
-import { API_URL } from '../utils/baseUrl'
+import { LogoBoldMan, LogoGhosty } from './Icons/Logo'
+import { API_URL, environment } from '../utils/baseUrl'
 import { socketio, SocketContext } from '../contexts/SocketContext'
 
 interface WidgetChatProps {
@@ -20,8 +20,20 @@ interface WidgetChatProps {
 
 const WidgetChat = ({ currentUser, generateAuthToken, partnership }: WidgetChatProps) => {
   const [currentChat, setCurrentChat] = useState<IUser>()
+  const [isMobile, setIsMobile] = useState<boolean>()
   const socket = useContext(SocketContext)
   const store = useStore()
+
+  useEffect(() => {
+    if (environment === 'production') {
+      if (window.innerWidth <= 1189) {
+        setIsMobile(true)
+      } else {
+        setIsMobile(false)
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [window.innerWidth])
 
   const userProfile = async () => {
     const res = await axios.get(`${API_URL}/api/profile`, {
@@ -119,7 +131,7 @@ const WidgetChat = ({ currentUser, generateAuthToken, partnership }: WidgetChatP
       <ChakraProvider>
         <Popover>
           <ButtonChat />
-          {currentUser ? (
+          {currentUser && !isMobile ? (
             <Box className='relative mx-8'>
               <Portal>
                 <PopoverContent minW='lg' minH='sm' className='absolute mx-8 rounded-lg'>
@@ -127,11 +139,11 @@ const WidgetChat = ({ currentUser, generateAuthToken, partnership }: WidgetChatP
                     templateAreas={
                       currentChat && !store.isAddUser && !store.isSetting && !store.isUserDetail && !store.isSetNickname
                         ? `"nav header"
-        "nav main"
-        "nav footer"`
+            "nav main"
+            "nav footer"`
                         : `"nav main"
-        "nav main"
-        "nav main"`
+            "nav main"
+            "nav main"`
                     }
                     gridTemplateRows={'50px 1fr 30px'}
                     gridTemplateColumns={'150px 1fr'}
@@ -166,13 +178,13 @@ const WidgetChat = ({ currentUser, generateAuthToken, partnership }: WidgetChatP
                 </PopoverContent>
               </Portal>
             </Box>
-          ) : (
+          ) : !isMobile ? (
             <Portal>
               <PopoverContent minW='lg' minH='sm' className='flex justify-center mx-8 rounded-lg'>
                 <Grid
                   templateAreas={`"nav main"
-        "nav main"
-        "nav main"`}
+            "nav main"
+            "nav main"`}
                   gridTemplateRows={'50px 1fr 30px'}
                   gridTemplateColumns={'150px 1fr'}
                   h='sm'
@@ -193,6 +205,20 @@ const WidgetChat = ({ currentUser, generateAuthToken, partnership }: WidgetChatP
                     </Box>
                   </GridItem>
                 </Grid>
+              </PopoverContent>
+            </Portal>
+          ) : (
+            <Portal>
+              <PopoverContent minW='xs' minH='xs' className='mx-4 px-4 rounded-lg'>
+                <Box className='mx-auto mt-5'>
+                  <LogoBoldMan size={150} />
+                </Box>
+                <Text className='text-center font-semibold'>
+                  Ooops! it{`'`}s a shame, it can{`'`}t be used for Mobile
+                </Text>
+                <Text className='text-center text-xs mt-4'>
+                  For the best experience, we recommend using the Chrome browser on a screen size of 1280px or larger.
+                </Text>
               </PopoverContent>
             </Portal>
           )}
