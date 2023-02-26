@@ -53,7 +53,7 @@ const Main = () => {
       const res = await axios.get(`${API_URL}/api/get-message`, {
         params: {
           id: currentChat?.accountChatList,
-          __limit: 50,
+          __limit: 1000,
           __skip: 0,
         },
         headers: {
