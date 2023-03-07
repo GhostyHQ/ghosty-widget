@@ -26,14 +26,16 @@ const WidgetChat = ({ currentUser, generateAuthToken, partnership }: WidgetChatP
 
   useEffect(() => {
     if (environment === 'production') {
-      if (window.innerWidth <= 1189) {
-        setIsMobile(true)
-      } else {
-        setIsMobile(false)
+      if (typeof window !== 'undefined') {
+        if (window.innerWidth <= 1189) {
+          setIsMobile(true)
+        } else {
+          setIsMobile(false)
+        }
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [window.innerWidth])
+  }, [typeof window !== 'undefined' && window.innerWidth])
 
   const userProfile = async () => {
     const res = await axios.get(`${API_URL}/api/profile`, {
